@@ -19,6 +19,15 @@ Press `Tab`, `M`, `1`, or `2` to switch modes. Press `H` for the person, `N` for
 the snake, `Q` for the dog, `8` for the spider, `V` to cycle
 normal/zombie/skeleton variants, `R` to reset, and `Esc` to quit.
 
+### Demo videos
+
+| Character | Movement | Video |
+| --- | --- | --- |
+| Person / relic mage | Biped | [Watch person demo](Videos/human.webm) |
+| Snake | Slither | [Watch snake demo](Videos/snake.webm) |
+| Dog | Quadruped | [Watch dog demo](Videos/dog.webm) |
+| Spider | Octopod | [Watch spider demo](Videos/spider.webm) |
+
 ### Character art direction
 
 The person is a **relic mage** from a world where technology is so advanced

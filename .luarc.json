@@ -1,0 +1,29 @@
+{
+    "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+    "runtime.version": "LuaJIT",
+    "runtime.path": [
+        "lua/?.lua",
+        "lua/?/init.lua",
+        "?.lua",
+        "?/init.lua"
+    ],
+    "workspace.library": [
+        "${3rd}/love2d/library"
+    ],
+    "workspace.checkThirdParty": false,
+    "diagnostics.globals": [
+        "love"
+    ],
+    "diagnostics.severity": {
+        "undefined-global": "Error!",
+        "unused-local": "Warning",
+        "unused-function": "Warning"
+    },
+    "format.enable": true,
+    "format.defaultConfig": {
+        "indent_style": "space",
+        "indent_size": "4",
+        "quote_style": "double",
+        "call_arg_parentheses": "keep"
+    }
+}
