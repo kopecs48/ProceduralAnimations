@@ -21,12 +21,21 @@ normal/zombie/skeleton variants, `R` to reset, and `Esc` to quit.
 
 ### Demo videos
 
-| Character | Movement | Video |
-| --- | --- | --- |
-| Person / relic mage | Biped | [Watch person demo](Videos/human.webm) |
-| Snake | Slither | [Watch snake demo](Videos/snake.webm) |
-| Dog | Quadruped | [Watch dog demo](Videos/dog.webm) |
-| Spider | Octopod | [Watch spider demo](Videos/spider.webm) |
+#### Person / relic mage — Biped
+
+https://github.com/user-attachments/assets/91c1bfb0-4998-44ce-b4d2-9b86a3c5a336
+
+#### Snake — Slither
+
+https://github.com/user-attachments/assets/a9ea7c00-86cf-478f-ada0-6e9866ccfe3f
+
+#### Dog — Quadruped
+
+https://github.com/user-attachments/assets/73cded36-2e20-4766-83cf-8a56daae6717
+
+#### Spider — Octopod
+
+https://github.com/user-attachments/assets/54aa90f6-e9cc-482c-90d8-564be57f57ab
 
 ### Character art direction
 
