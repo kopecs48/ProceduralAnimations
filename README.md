@@ -19,6 +19,17 @@ Press `Tab`, `M`, `1`, or `2` to switch modes. Press `H` for the person, `N` for
 the snake, `Q` for the dog, `8` for the spider, `V` to cycle
 normal/zombie/skeleton variants, `R` to reset, and `Esc` to quit.
 
+### Character art direction
+
+The person is a **relic mage** from a world where technology is so advanced
+that it looks like magic. Machinery is concealed in woven materials and jewelry:
+a gold-edged indigo mantle carries luminous conduits, a chest jewel powers
+geometric light constructs, and a suspended halo acts as a field interface.
+Wrist sigils and an orbiting familiar suggest spellwork without exposed screens,
+wires, or gears. The mantle sways with the gait; the halo and familiar drift
+even at rest. Normal, zombie, and skeleton variants use mint, acidic green,
+and lilac energy respectively, sharing the same visual language.
+
 ### Movement framework
 
 An actor is composed from two independent parts:

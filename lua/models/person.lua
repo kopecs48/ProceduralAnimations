@@ -4,9 +4,9 @@ local variant = "normal"
 local palettes = {}
 palettes.normal = {
     outline = { 0.025, 0.04, 0.055 }, skin = { 0.82, 0.55, 0.36 },
-    skinLight = { 0.96, 0.70, 0.48 }, shirt = { 0.20, 0.72, 0.66 },
-    shirtLight = { 0.35, 0.90, 0.78 }, trousers = { 0.15, 0.23, 0.38 },
-    rearTrousers = { 0.10, 0.16, 0.28 }, shoes = { 0.89, 0.38, 0.27 },
+    skinLight = { 0.96, 0.70, 0.48 }, shirt = { 0.16, 0.18, 0.33 },
+    shirtLight = { 0.32, 0.34, 0.52 }, trousers = { 0.15, 0.18, 0.29 },
+    rearTrousers = { 0.09, 0.11, 0.20 }, shoes = { 0.65, 0.55, 0.35 },
     hair = { 0.10, 0.065, 0.05 }, eye = { 0.035, 0.045, 0.05 },
 }
 palettes.zombie = {
@@ -24,6 +24,12 @@ palettes.skeleton = {
     hair = { 0.035, 0.045, 0.05 }, eye = { 0.035, 0.045, 0.05 },
 }
 local colors = palettes.normal
+local energy = {
+    normal = { 0.50, 0.96, 0.91 },
+    zombie = { 0.72, 0.95, 0.37 },
+    skeleton = { 0.76, 0.69, 1.00 },
+}
+local gold = { 0.83, 0.71, 0.46 }
 
 local function line(color, width, x1, y1, x2, y2)
     love.graphics.setColor(color)
@@ -34,6 +40,59 @@ end
 local function joint(color, x, y, radius)
     love.graphics.setColor(color)
     love.graphics.circle("fill", x, y, radius)
+end
+
+-- Field emitters appear as jewels and suspended spell geometry.
+local function sigil(x, y, radius, time)
+    local light = energy[variant]
+    love.graphics.setColor(light[1], light[2], light[3], 0.09)
+    love.graphics.circle("fill", x, y, radius * 2)
+    love.graphics.setColor(light[1], light[2], light[3], 0.8)
+    love.graphics.setLineWidth(1)
+    love.graphics.circle("line", x, y, radius)
+    love.graphics.push()
+    love.graphics.translate(x, y)
+    love.graphics.rotate(time)
+    love.graphics.polygon("line", 0, -radius, radius, 0, 0, radius, -radius, 0)
+    love.graphics.pop()
+    joint(light, x, y, 2)
+end
+
+local function drawMantle(pose)
+    local sway = math.sin(pose.phase) * pose.amount * 4
+        + math.sin(pose.elapsed * 1.7) * 1.5
+    love.graphics.setColor(colors.outline)
+    love.graphics.polygon("fill", -18, -84, 18, -84, 25 + sway, -28,
+        8 + sway, -34, sway, -25, -24 + sway, -30)
+    love.graphics.setColor(colors.shirt)
+    love.graphics.polygon("fill", -15, -81, 15, -81, 21 + sway, -33,
+        8 + sway, -38, sway, -30, -20 + sway, -34)
+    line(gold, 1.5, -15, -77, -20 + sway, -34)
+    line(gold, 1.5, 15, -77, 21 + sway, -33)
+    line(energy[variant], 1, -11, -66, -14 + sway, -40)
+    line(energy[variant], 1, 11, -66, 15 + sway, -40)
+end
+
+local function drawRelics(pose)
+    local t = pose.elapsed
+    local light = energy[variant]
+    local haloY = -128 + math.sin(t * 1.8) * 1.5
+    love.graphics.setColor(light[1], light[2], light[3], 0.15)
+    love.graphics.setLineWidth(5)
+    love.graphics.ellipse("line", 0, haloY, 23, 5)
+    love.graphics.setColor(light)
+    love.graphics.setLineWidth(1)
+    love.graphics.ellipse("line", 0, haloY, 23, 5)
+    for i = 1, 3 do
+        local angle = t * 0.7 + i * math.pi * 2 / 3
+        joint(gold, math.cos(angle) * 23, haloY + math.sin(angle) * 5, 2)
+    end
+    local x, y = 35 + math.cos(t * 0.8) * 5, -77 + math.sin(t * 1.6) * 6
+    sigil(x, y, 8, t * 0.6)
+    for i = 1, 3 do
+        local angle = -t + i * math.pi * 2 / 3
+        joint(light, x + math.cos(angle) * 13, y + math.sin(angle) * 13, 1)
+    end
 end
 
 local function drawLeg(pose, side, front)
@@ -64,6 +123,7 @@ local function drawArm(side, swing, front)
     line(colors.outline, 10, elbowX, elbowY, handX, handY)
     line(colors.skin, 6, elbowX, elbowY, handX, handY)
     joint(colors.skinLight, handX, handY, 4.5)
+    sigil(handX, handY - 3, 4, 0)
 end
 
 local function drawTorso(front)
@@ -82,6 +142,11 @@ local function drawTorso(front)
     love.graphics.rectangle("fill", -14, -54, 28, 9, 4, 4)
     love.graphics.setColor(colors.trousers)
     love.graphics.rectangle("fill", -11, -52, 22, 6, 3, 3)
+    -- Embroidered conduits meet at the chest's crystalline field core.
+    line(gold, 2, -13, -79, 0, -67)
+    line(gold, 2, 13, -79, 0, -67)
+    line(energy[variant], 1.5, 0, -67, 0, -55)
+    sigil(0, -69, 5, math.pi / 4)
     if variant == "skeleton" then
         for y = -74, -58, 5 do
             line(colors.outline, 2, -8, y, 8, y)
@@ -177,6 +242,7 @@ local function drawVerticalArm(pose, side, front)
     line(colors.outline, 10, elbowX, elbowY, handX, handY)
     line(colors.skin, 6, elbowX, elbowY, handX, handY)
     joint(colors.skinLight, handX, handY, 4.5)
+    sigil(handX, handY - 3, 4, 0)
 end
 
 local function drawVertical(pose)
@@ -210,14 +276,21 @@ function PersonModel.draw(actor, pose)
     local breathe = pose:getIdleBreath()
     love.graphics.setColor(0, 0, 0, 0.25)
     love.graphics.ellipse("fill", actor.x, actor.y + 3, 27 - bob, 7 - bob * 0.5)
-    love.graphics.push()
+    love.graphics.push("all")
     love.graphics.translate(actor.x, actor.y - bob + breathe)
     if pose.facingDirection == "up" or pose.facingDirection == "down" then
+        drawMantle(pose)
         drawVertical(pose)
+        if pose.facingDirection == "up" then
+            drawMantle(pose)
+            sigil(0, -64, 9, pose.elapsed * 0.2)
+        end
     else
         love.graphics.scale(pose.facing, 1)
+        drawMantle(pose)
         drawSide(pose)
     end
+    drawRelics(pose)
     love.graphics.pop()
 end
 
@@ -226,7 +299,7 @@ local drawPerson = PersonModel.draw
 function PersonModel.createVariant(requested)
     local selected = palettes[requested] and requested or "normal"
     local model = {
-        name = (selected == "normal" and "" or selected:upper() .. " ") .. "PERSON",
+        name = (selected == "normal" and "" or selected:upper() .. " ") .. "RELIC MAGE",
         movementKind = PersonModel.movementKind,
     }
     model.draw = function(actor, pose)
